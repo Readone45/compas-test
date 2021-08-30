@@ -1,155 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-      }
-
-      .compass {
-        position: relative;
-        width: 320px;
-        height: 320px;
-        border-radius: 50%;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        margin: auto;
-      }
-
-      .compass > .arrow {
-        position: absolute;
-        width: 0;
-        height: 0;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        border-style: solid;
-        border-width: 30px 20px 0 20px;
-        border-color: red transparent transparent transparent;
-        z-index: 1;
-      }
-
-      .compass > .compass-circle,
-      .compass > .my-point {
-        position: absolute;
-        width: 90%;
-        height: 90%;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: transform 0.1s ease-out;
-        background: url(assets/compas.png)
-          center no-repeat;
-        background-size: contain;
-      }
-
-      .compass > .my-point {
-        opacity: 0;
-        width: 20%;
-        height: 20%;
-        background: rgb(8, 223, 69);
-        border-radius: 50%;
-        transition: opacity 0.5s ease-out;
-      }
-
-      .start-btn {
-        margin-bottom: auto;
-      }
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://opengeo.tech/maps/leaflet-compass/src/leaflet-compass.css">
+    <style type="text/css">
+        #mapid{
+            width: 800px;
+            height: 400px;
+        }
     </style>
-  </head>
-  <body>
-    <div class="compass">
-      <div class="arrow"></div>
-      <div class="compass-circle"></div>
-      <div class="my-point"></div>
-    </div>
-    <button class="start-btn">Start compass</button>
-  </body>
-  <script>
-    const compassCircle = document.querySelector(".compass-circle");
-    const myPoint = document.querySelector(".my-point");
-    const startBtn = document.querySelector(".start-btn");
-    const isIOS =
-      navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
-      navigator.userAgent.match(/AppleWebKit/);
+</head>
+<body>
+    <div id="mapid"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://opengeo.tech/maps/leaflet-compass/dist/leaflet-compass.min.js"></script>
+    <script>
+        var mymap = L.map('mapid').setView([-0.44, 108.90], 5);
 
-    function init() {
-      startBtn.addEventListener("click", startCompass);
-      navigator.geolocation.getCurrentPosition(locationHandler);
+        L.tileLayer(
+            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5vdmluZG8iLCJhIjoiY2tzOHA0aXM3MWN0MDJvczNqczQ1aWUwcSJ9.25ioBE98HEMkb7smgN-Fzw', {
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1
+            }).addTo(mymap);
 
-      if (!isIOS) {
-        window.addEventListener("deviceorientationabsolute", handler, true);
-      }
-    }
+            mymap.addControl( new L.Control.Compass({autoActive: true, showDigit:true}));
 
-    function startCompass() {
-      if (isIOS) {
-        DeviceOrientationEvent.requestPermission()
-          .then((response) => {
-            if (response === "granted") {
-              window.addEventListener("deviceorientation", handler, true);
-            } else {
-              alert("has to be allowed!");
-            }
-          })
-          .catch(() => alert("not supported"));
-      }
-    }
+            var latlngs = [
+                [-7, 108.1],
+                [21.422529, 39.82618],
+            ];
 
-    function handler(e) {
-      compass = e.webkitCompassHeading || Math.abs(e.alpha - 360);
-      compassCircle.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
 
-      // ±15 degree
-      if (
-        (pointDegree < Math.abs(compass) &&
-          pointDegree + 15 > Math.abs(compass)) ||
-        pointDegree > Math.abs(compass + 15) ||
-        pointDegree < Math.abs(compass)
-      ) {
-        myPoint.style.opacity = 0;
-      } else if (pointDegree) {
-        myPoint.style.opacity = 1;
-      }
-    }
+        
+            L.marker([-0.44, 108.9]).addTo(mymap).bindPopup(
+            `<span><b>PPALC BANDUNG</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-bandung">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
 
-    let pointDegree;
+        
+            L.marker([-7, 108.9]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Sumedang</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-sumedang">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
 
-    function locationHandler(position) {
-      const { latitude, longitude } = position.coords;
-      pointDegree = calcDegreeToPoint(latitude, longitude);
+        
+            L.marker([-7, 108.1]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Singapura</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-singapura">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
 
-      if (pointDegree < 0) {
-        pointDegree = pointDegree + 360;
-      }
-    }
+        
+            L.marker([-6, 200]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Cirebon</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-cirebon">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
 
-    function calcDegreeToPoint(latitude, longitude) {
-      // Qibla geolocation
-      const point = {
-        lat: 21.422487,
-        lng: 39.826206
-      };
-
-      const phiK = (point.lat * Math.PI) / 180.0;
-      const lambdaK = (point.lng * Math.PI) / 180.0;
-      const phi = (latitude * Math.PI) / 180.0;
-      const lambda = (longitude * Math.PI) / 180.0;
-      const psi =
-        (180.0 / Math.PI) *
-        Math.atan2(
-          Math.sin(lambdaK - lambda),
-          Math.cos(phi) * Math.tan(phiK) -
-            Math.sin(phi) * Math.cos(lambdaK - lambda)
-        );
-      return Math.round(psi);
-    }
-
-    init();
-  </script>
+            </script>
+</body>
 </html>
