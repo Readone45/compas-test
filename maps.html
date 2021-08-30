@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://opengeo.tech/maps/leaflet-compass/src/leaflet-compass.css">
+    <style type="text/css">
+        #mapid{
+            width: 800px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mapid"></div>
+    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://opengeo.tech/maps/leaflet-compass/dist/leaflet-compass.min.js"></script>
+    <script>
+        var mymap = L.map('mapid').setView([-0.44, 108.90], 5);
+
+        L.tileLayer(
+            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5vdmluZG8iLCJhIjoiY2tzOHA0aXM3MWN0MDJvczNqczQ1aWUwcSJ9.25ioBE98HEMkb7smgN-Fzw', {
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1
+            }).addTo(mymap);
+
+            mymap.addControl( new L.Control.Compass({autoActive: true, showDigit:true}));
+
+            var latlngs = [
+                [-7, 108.1],
+                [21.422529, 39.82618],
+            ];
+
+            var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+
+        
+            L.marker([-0.44, 108.9]).addTo(mymap).bindPopup(
+            `<span><b>PPALC BANDUNG</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-bandung">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
+
+        
+            L.marker([-7, 108.9]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Sumedang</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-sumedang">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
+
+        
+            L.marker([-7, 108.1]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Singapura</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-singapura">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
+
+        
+            L.marker([-6, 200]).addTo(mymap).bindPopup(
+            `<span><b>PPALC Cirebon</b></span><br>
+            <a href="http://localhost:8000/branch-office/ppalc-cirebon">Lihat Detail Cabang</a><br>
+            <a href="">Buka Peta</a>`);
+
+            </script>
+</body>
+</html>
