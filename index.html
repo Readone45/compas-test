@@ -33,35 +33,18 @@
             mymap.addControl( new L.Control.Compass({autoActive: true, showDigit:true}));
 
             var latlngs = [
-                [-7, 108.1],
-                [21.422529, 39.82618],
+                [-6.981941, 107.668487],
+                [21.422529, 39.82618], //titik koordinat ka'bah
             ];
 
             var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
 
-        
-            L.marker([-0.44, 108.9]).addTo(mymap).bindPopup(
-            `<span><b>PPALC BANDUNG</b></span><br>
-            <a href="http://localhost:8000/branch-office/ppalc-bandung">Lihat Detail Cabang</a><br>
-            <a href="">Buka Peta</a>`);
+			//titik koordinat user
+            L.marker([-6.981941, 107.668487]).addTo(mymap).bindPopup(
+            `<span><b>INFO</b></span><br>
+            <a href="#">Item</a><br>
+            <a href="">Item</a>`);
 
-        
-            L.marker([-7, 108.9]).addTo(mymap).bindPopup(
-            `<span><b>PPALC Sumedang</b></span><br>
-            <a href="http://localhost:8000/branch-office/ppalc-sumedang">Lihat Detail Cabang</a><br>
-            <a href="">Buka Peta</a>`);
-
-        
-            L.marker([-7, 108.1]).addTo(mymap).bindPopup(
-            `<span><b>PPALC Singapura</b></span><br>
-            <a href="http://localhost:8000/branch-office/ppalc-singapura">Lihat Detail Cabang</a><br>
-            <a href="">Buka Peta</a>`);
-
-        
-            L.marker([-6, 200]).addTo(mymap).bindPopup(
-            `<span><b>PPALC Cirebon</b></span><br>
-            <a href="http://localhost:8000/branch-office/ppalc-cirebon">Lihat Detail Cabang</a><br>
-            <a href="">Buka Peta</a>`);
 
             </script>
 </body>
